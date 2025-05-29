@@ -13,7 +13,7 @@ local rowsPerPage = screenH - 5
 -- Data & state
 local allData = {}
 local currentPage = 1
-local filters = {fluids = true, gases = true, essentia = true}
+local filters = {fluids = true, gases = true, essentia = true, energy = true}
  
 -- Colors
 local function generateColor(str)
@@ -68,15 +68,13 @@ end
 local function getFilteredData()
   local items = {}
     
-  if component.isAvailable("induction_matrix") then
-    local matrix = component.induction_matrix
-    local stored = matrix.getEnergy()
-    local max = matrix.getMaxEnergy()
-    table.insert(items, 1, {
-      type = "entry", name = "Energy", amount = stored, capacity = max
-    })
-    table.insert(items, 1, {type="header", label="== Energy =="})
-  end
+ if filters.energy and component.isAvailable("induction_matrix") then
+   local matrix = component.induction_matrix
+   local stored = matrix.getEnergy()
+   local max = matrix.getMaxEnergy()
+   table.insert(items, {type = "header", label = "== Energy =="})
+   table.insert(items, {type = "entry", name = "Energy", amount = stored, capacity = max})
+ end
  
   if filters.fluids and me.getFluidsInNetwork then
     local fluids = me.getFluidsInNetwork() or {}
@@ -154,6 +152,7 @@ local function drawUI()
   drawButton(24, "[Fluids]", filters.fluids)
   drawButton(35, "[Gases]", filters.gases)
   drawButton(45, "[Essentia]", filters.essentia)
+  drawButton(55, "[Energy]", filters.energy)
   drawButton(screenW - 10, "[Refresh]", false)
 end
  
@@ -174,6 +173,9 @@ local function handleTouch(x, y)
     currentPage = 1
   elseif inBounds(x, y, 45, screenH - 1, 11) then
     filters.essentia = not filters.essentia
+    currentPage = 1
+  elseif inBounds(x, y, 55, screenH - 1, 9) then
+    filters.energy = not filters.energy
     currentPage = 1
   elseif inBounds(x, y, screenW - 10, screenH - 1, 9) then
     -- Refresh
