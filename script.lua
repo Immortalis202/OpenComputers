@@ -80,25 +80,46 @@ local function getFilteredData()
  
   if filters.fluids and me.getFluidsInNetwork then
     local fluids = me.getFluidsInNetwork() or {}
-    table.insert(items, {type="header", label="== Fluids =="})
-    for _, f in ipairs(fluids) do
-      table.insert(items, {type="entry", name=f.label or f.name, amount=f.amount or 0, capacity=f.capacity or f.amount})
+    if #fluids > 0 then
+      table.insert(items, {type = "header", label = "== Fluids =="})
+      for _, f in ipairs(fluids) do
+        table.insert(items, {
+          type = "entry",
+          name = f.label or f.name,
+          amount = f.amount or 0,
+          capacity = f.capacity or f.amount
+        })
+      end
     end
   end
  
   if filters.gases and me.getGasesInNetwork then
     local gases = me.getGasesInNetwork() or {}
-    table.insert(items, {type="header", label="== Gases =="})
-    for _, g in ipairs(gases) do
-      table.insert(items, {type="entry", name=g.label or g.name, amount=g.amount or 0, capacity=g.capacity or g.amount})
+    if #gases > 0 then
+      table.insert(items, {type = "header", label = "== Gases =="})
+      for _, g in ipairs(gases) do
+        table.insert(items, {
+          type = "entry",
+          name = g.label or g.name,
+          amount = g.amount or 0,
+          capacity = g.capacity or g.amount
+        })
+      end
     end
   end
  
   if filters.essentia and me.getEssentiaInNetwork then
     local essentia = me.getEssentiaInNetwork() or {}
-    table.insert(items, {type="header", label="== Essentia =="})
-    for _, e in ipairs(essentia) do
-      table.insert(items, {type="entry", name=e.label or e.name, amount=e.amount or 0, capacity=1000})
+    if #essentia > 0 then
+      table.insert(items, {type = "header", label = "== Essentia =="})
+      for _, e in ipairs(essentia) do
+        table.insert(items, {
+          type = "entry",
+          name = e.label or e.name,
+          amount = e.amount or 0,
+          capacity = 3000
+        })
+      end
     end
   end
  
